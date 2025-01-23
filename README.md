@@ -1,4 +1,4 @@
-# Beach Dialogue Game
+# 5 Days with Dio
 
 A visual novel-style dialogue game built with Phaser 3, featuring various scenes with dynamic character interactions, minigames and multiple dialogue choices.
 

@@ -1,0 +1,19 @@
+# Dependencies
+/node_modules/
+
+# Package manager files
+package-lock.json
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Build output
+/dist/
+/build/
+
+# Environment variables
+.env
+.env.local 

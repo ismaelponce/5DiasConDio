@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>5 días con Dio</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <!-- Cargar Phaser primero -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+    
+    <!-- Cargar todas las escenas ANTES de main.js -->
+    <script src="src/scenes/MenuScene.js"></script>
+    <script src="src/scenes/BeachScene.js"></script>
+    <script src="src/scenes/GameOverScene.js"></script>
+    
+    <!-- Cargar main.js al final -->
+    <script src="src/main.js"></script>
+</body>
+</html>

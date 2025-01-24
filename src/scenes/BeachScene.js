@@ -607,12 +607,20 @@ class BeachScene extends Phaser.Scene {
     }
 
     handleKeyUp() {
-        this.selectedOptionIndex = Phaser.Math.Wrap(this.selectedOptionIndex - 1, 0, this.currentOptions.length);
+        this.selectedOptionIndex = Phaser.Math.Clamp(
+            this.selectedOptionIndex - 1, 
+            0, 
+            this.currentOptions.length - 1
+        );
         this.hoverOption(this.selectedOptionIndex);
     }
 
     handleKeyDown() {
-        this.selectedOptionIndex = Phaser.Math.Wrap(this.selectedOptionIndex + 1, 0, this.currentOptions.length);
+        this.selectedOptionIndex = Phaser.Math.Clamp(
+            this.selectedOptionIndex + 1, 
+            0, 
+            this.currentOptions.length - 1
+        );
         this.hoverOption(this.selectedOptionIndex);
     }
 

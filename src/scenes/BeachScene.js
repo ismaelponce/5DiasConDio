@@ -559,7 +559,11 @@ class BeachScene extends Phaser.Scene {
 
     createOptions(options) {
         const optionHeight = 35;
-        options.forEach((option, index) => {
+        this.currentOptions = options; // Guardar referencia
+        this.selectedOptionIndex = 0; // Índice seleccionado
+        
+        // Crear botones
+        this.optionButtons = options.map((option, index) => {
             const btn = this.add.text(270, this.optionStartY + (index * optionHeight), `➤ ${option.text}`, {
                 fontSize: '18px',
                 fill: '#FFD700',
@@ -569,16 +573,59 @@ class BeachScene extends Phaser.Scene {
                 wordWrap: { width: 460 }
             })
             .setInteractive()
-            .on('pointerover', () => btn.setBackgroundColor('#3d3d3d'))
-            .on('pointerout', () => btn.setBackgroundColor('#2d2d2d'))
+            .on('pointerover', () => this.hoverOption(index))
+            .on('pointerout', () => this.resetOptionStyle(index))
             .on('pointerdown', () => this.handleOptionSelection(option))
             .setDepth(13);
             
             this.dialogueElements.push(btn);
+            return btn;
         });
+
+        // Resaltar opción inicial
+        this.hoverOption(0);
+        
+        // Habilitar navegación por teclado
+        this.input.keyboard.on('keydown-UP', this.handleKeyUp, this);
+        this.input.keyboard.on('keydown-DOWN', this.handleKeyDown, this);
+        this.input.keyboard.on('keydown-ENTER', this.handleKeyEnter, this);
+    }
+
+    hoverOption(index) {
+        // Resetear todos los estilos
+        this.optionButtons.forEach((btn, i) => {
+            btn.setBackgroundColor(i === index ? '#3d3d3d' : '#2d2d2d');
+            btn.setStyle({ fill: i === index ? '#FFA500' : '#FFD700' });
+        });
+        this.selectedOptionIndex = index;
+    }
+
+    resetOptionStyle(index) {
+        if (index === this.selectedOptionIndex) return;
+        this.optionButtons[index].setBackgroundColor('#2d2d2d');
+        this.optionButtons[index].setStyle({ fill: '#FFD700' });
+    }
+
+    handleKeyUp() {
+        this.selectedOptionIndex = Phaser.Math.Wrap(this.selectedOptionIndex - 1, 0, this.currentOptions.length);
+        this.hoverOption(this.selectedOptionIndex);
+    }
+
+    handleKeyDown() {
+        this.selectedOptionIndex = Phaser.Math.Wrap(this.selectedOptionIndex + 1, 0, this.currentOptions.length);
+        this.hoverOption(this.selectedOptionIndex);
+    }
+
+    handleKeyEnter() {
+        this.handleOptionSelection(this.currentOptions[this.selectedOptionIndex]);
     }
 
     handleOptionSelection(option) {
+        // Limpiar eventos de teclado
+        this.input.keyboard.off('keydown-UP', this.handleKeyUp, this);
+        this.input.keyboard.off('keydown-DOWN', this.handleKeyDown, this);
+        this.input.keyboard.off('keydown-ENTER', this.handleKeyEnter, this);
+        
         this.affinity += option.affinity;
         this.showDioResponse(option);
     }
@@ -650,8 +697,16 @@ class BeachScene extends Phaser.Scene {
     }
 
     clearDialogueElements() {
+        // Limpiar eventos de teclado
+        this.input.keyboard.off('keydown-UP', this.handleKeyUp, this);
+        this.input.keyboard.off('keydown-DOWN', this.handleKeyDown, this);
+        this.input.keyboard.off('keydown-ENTER', this.handleKeyEnter, this);
+        
+        // Resto del código de limpieza
         this.dialogueElements.forEach(element => element.destroy());
         this.dialogueElements = [];
+        this.optionButtons = [];
+        this.currentOptions = null;
     }
 
     createDialogueOverlay() {

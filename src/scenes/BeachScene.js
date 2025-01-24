@@ -181,7 +181,286 @@ class BeachScene extends Phaser.Scene {
                     }
                 ]
             },
-            // ... (Añadir el resto de diálogos con expresiones siguiendo el mismo patrón)
+            {
+                text: "Dio:\n¿Crees que el arte debe\nreflejar la realidad o escapar de ella?",
+                options: [
+                    { 
+                        text: "Reflejar la realidad", 
+                        affinity: +2,
+                        response: "Dio:\nLa crudeza de la verdad siempre inspira arte poderoso...",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "Ofrecer escapismo", 
+                        affinity: +1,
+                        response: "Dio:\nLos mundos imaginarios son refugios necesarios...",
+                        expression: 'neutral'
+                    },
+                    { 
+                        text: "Ambos son válidos", 
+                        affinity: +3,
+                        response: "Dio:\nEquilibrio perfecto... como un haiku bien estructurado.",
+                        expression: 'smile'
+                    },
+                    { 
+                        text: "El arte no tiene propósito", 
+                        affinity: -4,
+                        response: "Dio:\n¡Qué afirmación vacía! *cierra bruscamente su cuaderno*",
+                        expression: 'angry'
+                    },
+                    { 
+                        text: "No tengo opinión", 
+                        affinity: 0,
+                        response: "Dio:\nLa indiferencia también es una forma de arte, ¿no crees?",
+                        expression: 'smirk'
+                    }
+                ]
+            },
+            {
+                text: "Dio:\n¿Qué opinas de las\nrelaciones a distancia?",
+                options: [
+                    { 
+                        text: "Demuestran amor verdadero", 
+                        affinity: +4,
+                        response: "Dio:\nEl amor que trasciende el espacio... pura poesía.",
+                        expression: 'smile'
+                    },
+                    { 
+                        text: "Son difíciles de mantener", 
+                        affinity: +1,
+                        response: "Dio:\nLa constancia es el verdadero desafío, ¿cierto?",
+                        expression: 'neutral'
+                    },
+                    { 
+                        text: "No funcionan a largo plazo", 
+                        affinity: -2,
+                        response: "Dio:\nCínico... pero quizás realista.",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "Son una pérdida de tiempo", 
+                        affinity: -3,
+                        response: "Dio:\n*Arroja arena al mar* ¡Qué visión más pragmática!",
+                        expression: 'angry'
+                    },
+                    { 
+                        text: "Depende de cada caso", 
+                        expression: 'smirk',
+                        affinity: 0,
+                        response: "Dio:\nRespuesta diplomática... interesante postura."
+                    }
+                ]
+            },
+            {
+                text: "Dio:\nCuando miras al mar,\n¿en qué piensas?",
+                options: [
+                    { 
+                        text: "En lo vasto del universo", 
+                        affinity: +3,
+                        response: "Dio:\nSomos motas de polvo cósmico... sublime perspectiva.",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "En la belleza natural", 
+                        affinity: +2,
+                        response: "Dio:\nLa naturaleza es el mejor poema no escrito.",
+                        expression: 'smile'
+                    },
+                    { 
+                        text: "En nada en particular", 
+                        affinity: 0,
+                        response: "Dio:\nLa mente en blanco puede ser un refugio...",
+                        expression: 'neutral'
+                    },
+                    { 
+                        text: "En lo insignificante que somos", 
+                        affinity: -2,
+                        response: "Dio:\nExistencialismo puro... fascinante y aterrador.",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "Solo disfruto el momento", 
+                        affinity: +1,
+                        response: "Dio:\nCarpe diem... filosofía admirablemente simple.",
+                        expression: 'smirk'
+                    }
+                ]
+            },
+            {
+                text: "Dio:\n¿Prefieres el amanecer\n o el atardecer?",
+                options: [
+                    { 
+                        text: "Amanecer - nuevos comienzos", 
+                        affinity: +2,
+                        response: "Dio:\nEl lienzo en blanco de cada mañana... esperanza pura.",
+                        expression: 'smile'
+                    },
+                    { 
+                        text: "Atardecer - reflexión", 
+                        affinity: +3,
+                        response: "Dio:\nEl crepúsculo inspira mis versos más íntimos...",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "Ambos tienen su encanto", 
+                        affinity: +1,
+                        response: "Dio:\nEquilibrado como un soneto perfecto.",
+                        expression: 'neutral'
+                    },
+                    { 
+                        text: "Odio ambos por igual", 
+                        affinity: -3,
+                        response: "Dio:\n*Rompe una ola con el pie* ¡Qué declaración tan visceral!",
+                        expression: 'angry'
+                    },
+                    { 
+                        text: "Cualquier hora es buena", 
+                        affinity: 0,
+                        response: "Dio:\nFlexibilidad... virtud subestimada.",
+                        expression: 'smirk'
+                    }
+                ]
+            },
+            {
+                text: "Dio:\n¿Qué cualidad valoras más\nen una persona?",
+                options: [
+                    { 
+                        text: "Honestidad", 
+                        affinity: +4,
+                        response: "Dio:\nLa verdad, aunque duela... cualidad de almas fuertes.",
+                        expression: 'smile'
+                    },
+                    { 
+                        text: "Lealtad", 
+                        affinity: +3,
+                        response: "Dio:\nRara joya en este mundo cambiante...",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "Empatía", 
+                        affinity: +3,
+                        response: "Dio:\nEntender el dolor ajeno... don de poetas.",
+                        expression: 'neutral'
+                    },
+                    { 
+                        text: "Ninguna tiene valor", 
+                        affinity: -4,
+                        response: "Dio:\n*Ríe amargamente* ¡Qué nihilismo más refrescante!",
+                        expression: 'angry'
+                    },
+                    { 
+                        text: "Todas son importantes", 
+                        affinity: +1,
+                        response: "Dio:\nVisión holística... perspectiva interesante.",
+                        expression: 'smirk'
+                    }
+                ]
+            },
+            {
+                text: "Dio:\n¿Crees en el amor\na primera vista?",
+                options: [
+                    { 
+                        text: "Absolutamente", 
+                        affinity: +2,
+                        response: "Dio:\nRomántico incorregible... ¿has leído mucho a Neruda?",
+                        expression: 'smile'
+                    },
+                    { 
+                        text: "Es solo atracción física", 
+                        affinity: -1,
+                        response: "Dio:\nCientífico enfoque... ¿nunca te ha traicionado el corazón?",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "Depende de la conexión", 
+                        affinity: +3,
+                        response: "Dio:\nAlquimia de almas... hermosa metáfora.",
+                        expression: 'neutral'
+                    },
+                    { 
+                        text: "El amor no existe", 
+                        affinity: -4,
+                        response: "Dio:\n*Rompe una pluma imaginaria* ¡Qué declaración más triste!",
+                        expression: 'angry'
+                    },
+                    { 
+                        text: "No lo he pensado", 
+                        affinity: 0,
+                        response: "Dio:\nLa indiferencia también tiene su encanto...",
+                        expression: 'smirk'
+                    }
+                ]
+            },
+            {
+                text: "Dio:\n¿Qué harías si tuvieras\nsolo un día de vida?",
+                options: [
+                    { 
+                        text: "Pasar tiempo con seres queridos", 
+                        affinity: +4,
+                        response: "Dio:\nLos lazos humanos... único legado que perdura.",
+                        expression: 'smile'
+                    },
+                    { 
+                        text: "Vivir una aventura", 
+                        affinity: +2,
+                        response: "Dio:\n¡Carpe diem en estado puro! Espíritu valiente...",
+                        expression: 'neutral'
+                    },
+                    { 
+                        text: "Reflexionar en soledad", 
+                        affinity: +1,
+                        response: "Dio:\nEl autoconocimiento como epílogo... profundo.",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "Destruir algo importante", 
+                        affinity: -5,
+                        response: "Dio:\n*Sonríe siniestramente* ¡Qué final más dramático!",
+                        expression: 'angry'
+                    },
+                    { 
+                        text: "Seguir mi rutina normal", 
+                        affinity: 0,
+                        response: "Dio:\nEstabilidad hasta el final... enfoque práctico.",
+                        expression: 'smirk'
+                    }
+                ]
+            },
+            {
+                text: "Dio:\n¿Crees que nuestros\ndestinos están escritos?",
+                options: [
+                    { 
+                        text: "Sí, todo está predeterminado", 
+                        affinity: +1,
+                        response: "Dio:\nFatalista... ¿y el libre albedrío? *hojea su libro*",
+                        expression: 'thoughtful'
+                    },
+                    { 
+                        text: "No, forjamos nuestro camino", 
+                        affinity: +3,
+                        response: "Dio:\n¡Voluntad inquebrantable! Admirable convicción.",
+                        expression: 'smile'
+                    },
+                    { 
+                        text: "Depende de las decisiones", 
+                        affinity: +2,
+                        response: "Dio:\nEquilibrio entre caos y orden... sabia perspectiva.",
+                        expression: 'neutral'
+                    },
+                    { 
+                        text: "El destino es una mentira", 
+                        affinity: -3,
+                        response: "Dio:\nRebelde contra el cosmos... posición interesante.",
+                        expression: 'smirk'
+                    },
+                    { 
+                        text: "Prefiero no responder", 
+                        affinity: 0,
+                        response: "Dio:\nEl misterio... a veces la mejor respuesta.",
+                        expression: 'thoughtful'
+                    }
+                ]
+            }
         ];
     }
 

@@ -2,21 +2,45 @@
 <html>
 <head>
     <title>5 días con Dio</title>
+    <link rel="preload" href="assets/fonts/pixelFont.ttf" as="font" type="font/ttf" crossorigin>
     <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; margin: auto; }
+        canvas {
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        #game-container {
+            max-width: 1000px; /* Ancho máximo con márgenes */
+            margin: 0 auto;
+            height: 100vh;
+            background: #1a1a1a; /* Color de los bordes laterales */
+        }
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+        }
+        @font-face {
+            font-family: 'PixelFont';
+            src: url('assets/fonts/pixelFont.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: block;
+        }
+        
     </style>
 </head>
 <body>
-    <!-- Cargar Phaser primero -->
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
-    
-    <!-- Cargar todas las escenas ANTES de main.js -->
-    <script src="src/scenes/MenuScene.js"></script>
-    <script src="src/scenes/BeachScene.js"></script>
-    <script src="src/scenes/GameOverScene.js"></script>
-    
-    <!-- Cargar main.js al final -->
-    <script src="src/main.js"></script>
+    <div id="game-container">
+        <!-- Cargar Phaser primero -->
+        <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+        
+        <!-- Cargar todas las escenas ANTES de main.js -->
+        <script src="src/scenes/MenuScene.js"></script>
+        <script src="src/scenes/BeachScene.js"></script>
+        <script src="src/scenes/GameOverScene.js"></script>
+        
+        <!-- Cargar main.js al final -->
+        <script src="src/main.js"></script>
+    </div>
 </body>
 </html>

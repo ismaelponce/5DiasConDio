@@ -15,15 +15,15 @@ class GameOverScene extends Phaser.Scene {
         let bgColor, titleText, bodyText;
         
         if (affinity >= 5) {
-            bgColor = 0x4a752c; // Verde esperanzador
+            bgColor = 0x4a752c;
             titleText = 'Final Bueno';
             bodyText = 'Dio te entrega un poema:\n"En tus ojos encontré\nel ritmo que el mar me negó..."';
         } else if (affinity >= 0) {
-            bgColor = 0x808080; // Gris neutral
+            bgColor = 0x808080;
             titleText = 'Final Neutral';
             bodyText = 'Dio asiente con una sonrisa tímida.\n"Gracias por caminar conmigo..."';
         } else {
-            bgColor = 0x8b0000; // Rojo dramático
+            bgColor = 0x8b0000;
             titleText = 'Final Malo';
             bodyText = 'Dio cierra su libro bruscamente.\n"Creo que deberíamos terminar esto aquí."';
         }
@@ -50,7 +50,7 @@ class GameOverScene extends Phaser.Scene {
             wordWrap: { width: 600 }
         }).setOrigin(0.5);
 
-        // Botón para reiniciar (mejorado)
+        // Botón para reiniciar (recarga la página)
         const restartButton = this.add.text(400, 500, 'Volver a empezar', {
             fontSize: '32px',
             fill: '#FFD700',
@@ -61,14 +61,12 @@ class GameOverScene extends Phaser.Scene {
         .setInteractive()
         .setOrigin(0.5)
         .on('pointerdown', () => {
-            // Eliminar instancias de escenas
-            if (this.scene.get('BeachScene')) {
-                this.scene.remove('BeachScene');
-            }
-            
-            // Resetear registros y cargar menú
-            this.game.registry.set('affinity', 0);
-            this.scene.start('MenuScene');
+            window.location.reload(); // Recarga completa de la página
+        });
+
+        // También permitir recargar con Enter
+        this.input.keyboard.once('keydown-ENTER', () => {
+            window.location.reload();
         });
     }
 }

@@ -745,6 +745,7 @@ class BeachScene extends Phaser.Scene {
         this.dialogueElements = [];
         this.optionButtons = [];
         this.currentOptions = null;
+        this.selectedOptionIndex = 0; 
     }
 
     createDialogueOverlay() {
@@ -774,9 +775,25 @@ class BeachScene extends Phaser.Scene {
         this.affinity = 0;
         this.dialogueElements = [];
         
-        if (this.player) this.player.destroy();
-        if (this.dio) this.dio.destroy();
+        // Limpiar listeners de teclado
+        this.input.keyboard.off('keydown-UP');
+        this.input.keyboard.off('keydown-DOWN');
+        this.input.keyboard.off('keydown-ENTER');
+        this.input.keyboard.off('keydown-SPACE');
         
-        this.physics.world.resume();
+        if (this.player) {
+            this.player.destroy(true);
+            this.player = null;
+        }
+        
+        if (this.dio) {
+            this.dio.destroy(true);
+            this.dio = null;
+        }
+        
+        // Limpiar animaciones
+        this.anims.remove('dio_idle');
+        this.anims.remove('player_idle');
+        this.anims.remove('player_walk');
     }
 }

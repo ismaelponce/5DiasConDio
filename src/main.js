@@ -9,6 +9,13 @@ const config = {
         default: 'arcade',
         arcade: { gravity: { y: 0 } }
     },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        parent: 'game-container',
+        width: 800,
+        height: 600
+    },
     audio: {
         disableWebAudio: true
     }

@@ -5,43 +5,127 @@ class MenuScene extends Phaser.Scene {
 
     preload() {
         this.load.image('menu_bg', 'assets/images/ui/menu_bg.png');
+        this.load.spritesheet('waves', 'assets/images/ui/waves_spritesheet.png', {
+            frameWidth: 600,
+            frameHeight: 600,
+            endFrame: 9
+        });
+        this.load.image('palm', 'assets/images/ui/palm_tree.png');
     }
 
     create() {
-        // Fondo y texto
-        this.add.image(400, 300, 'menu_bg')
-            .setDisplaySize(800, 600);
+        // Configurar escalado
+        const { width, height } = this.scale;
+        const gameWidth = 800;
+        const gameHeight = 600;
         
-        this.add.text(400, 200, '5 días con Dio', {
-            fontSize: '48px',
-            fill: '#FFFFFF',
-            fontFamily: 'Arial'
-        }).setOrigin(0.5);
+        // Centrar elementos en el área visible
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const scaleRatio = Math.min(width / gameWidth, height / gameHeight);
 
-        // Botón de inicio (mejorado)
-        const startButton = this.add.text(400, 400, 'Comenzar', {
-            fontSize: '32px',
-            fill: '#FFD700',
-            fontFamily: 'Arial'
-        }).setOrigin(0.5).setInteractive();
+        // Fondo estático
+        this.background = this.add.image(centerX, centerY, 'menu_bg')
+            .setScale(scaleRatio)
+            .setScrollFactor(0);
 
-        // Evento click
-        startButton.on('pointerdown', () => {
-            // Resetear afinidad y eliminar escenas anteriores
+        // Animación de olas
+        this.waves = this.add.sprite(centerX, centerY, 'waves')
+            .setScale(scaleRatio)
+            .setScrollFactor(0);
+
+        this.anims.create({
+            key: 'wave_anim',
+            frames: this.anims.generateFrameNumbers('waves', { start: 0, end: 9 }),
+            frameRate: 12,
+            repeat: -1
+        });
+        this.waves.play('wave_anim');
+
+        // Elementos decorativos
+        this.add.image(centerX + 300 * scaleRatio, centerY - 200 * scaleRatio, 'palm')
+            .setScale(0.5 * scaleRatio)
+            .setAngle(-10)
+            .setScrollFactor(0);
+
+        this.add.image(centerX - 300 * scaleRatio, centerY + 200 * scaleRatio, 'palm')
+            .setScale(0.4 * scaleRatio)
+            .setAngle(15)
+            .setFlipX(true)
+            .setScrollFactor(0);
+
+        // Título
+        const title = this.add.text(
+            centerX,
+            centerY - 150 * scaleRatio,
+            '5 días con Dio', 
+            {
+                fontFamily: 'PixelFont',
+                fontSize: `${48 * scaleRatio}px`,
+                color: '#FFFFFF'
+            }
+        ).setOrigin(0.5);
+
+        // Animación de título
+        this.tweens.add({
+            targets: title,
+            y: centerY - 170 * scaleRatio,
+            duration: 2000,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: -1
+        });
+
+        // Botón de inicio
+        const startButton = this.add.text(
+            centerX,
+            centerY + 100 * scaleRatio,
+            '> COMENZAR <', 
+            {
+                fontFamily: 'PixelFont',
+                fontSize: `${32 * scaleRatio}px`,
+                color: '#FFD700'
+            }
+        ).setOrigin(0.5);
+
+        // Interactividad del botón
+        startButton.setInteractive({ useHandCursor: true })
+            .on('pointerover', () => {
+                this.tweens.add({
+                    targets: startButton,
+                    scale: 1.2,
+                    duration: 200
+                });
+            })
+            .on('pointerout', () => {
+                this.tweens.add({
+                    targets: startButton,
+                    scale: 1,
+                    duration: 200
+                });
+            })
+            .on('pointerdown', () => {
+                this.startGame();
+            });
+
+        // Créditos
+        this.add.text(
+            centerX,
+            height - 50 * scaleRatio,
+            '© 2025 PixelNamer Studios', 
+            {
+                fontFamily: 'PixelFont',
+                fontSize: `${16 * scaleRatio}px`,
+                color: '#FFFFFF'
+            }
+        ).setOrigin(0.5);
+    }
+
+    startGame() {
+        this.cameras.main.fadeOut(1000, 0, 0, 0);
+        this.time.delayedCall(1000, () => {
             this.game.registry.set('affinity', 0);
-            
-            // Eliminar instancias previas de BeachScene
-            if (this.scene.get('BeachScene')) {
-                this.scene.remove('BeachScene');
-            }
-            
-            // Crear nueva instancia de BeachScene
-            this.scene.add('BeachScene', new BeachScene(), true);
-            
-            // Detener GameOverScene si está activo
-            if (this.scene.isActive('GameOverScene')) {
-                this.scene.stop('GameOverScene');
-            }
+            this.scene.start('BeachScene');
         });
     }
 }

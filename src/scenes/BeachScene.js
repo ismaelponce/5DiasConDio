@@ -9,6 +9,7 @@ class BeachScene extends Phaser.Scene {
         this.currentText = null;
         this.typedText = null;
         this.dialogueConfig = this.createDialogueConfig();
+        this.lastKeyPressTime = 0; // Nueva propiedad para control de tiempo
     }
 
     preload() {
@@ -103,7 +104,7 @@ class BeachScene extends Phaser.Scene {
     showDialogueStep() {
         this.clearDialogueElements();
         this.createDialogueOverlay();
-        this.createPortrait('neutral'); // Expresión neutral por defecto
+        this.createPortrait('neutral');
 
         const currentStep = this.dialogueConfig[this.currentDialogueStep];
         this.createDialogueBox(currentStep.text, currentStep.options.length);
@@ -477,7 +478,8 @@ class BeachScene extends Phaser.Scene {
 
         const optionHeight = 35 * optionCount;
         const padding = 40;
-        const totalHeight = textHeight + optionHeight + padding;
+        const controlsHintHeight = 25;
+        const totalHeight = textHeight + optionHeight + padding + controlsHintHeight;
 
         const dialogueBox = this.add.graphics()
             .fillStyle(0x1a1a1a, 0.95)
@@ -495,6 +497,15 @@ class BeachScene extends Phaser.Scene {
         }).setDepth(13);
         this.dialogueElements.push(this.typedText);
 
+        // Hint de controles
+        const controlsHint = this.add.text(270, 200 + textHeight + optionHeight + 30, 
+            'Usa ↑/↓ para navegar, ESPACIO/ENTER para seleccionar', {
+                fontSize: '16px',
+                fill: '#AAAAAA',
+                fontStyle: 'italic'
+            }).setDepth(13);
+        this.dialogueElements.push(controlsHint);
+
         this.optionStartY = 200 + textHeight + 20;
 
         this.isTextTyping = true;
@@ -505,7 +516,6 @@ class BeachScene extends Phaser.Scene {
     }
 
     createPortrait(expression = 'neutral') {
-        // Eliminar retratos anteriores
         this.dialogueElements.forEach((element, index) => {
             if(element.texture && element.texture.key.startsWith('dio_')) {
                 element.destroy();
@@ -513,7 +523,6 @@ class BeachScene extends Phaser.Scene {
             }
         });
 
-        // Mapeo de expresiones
         const expressions = {
             neutral: 'dio_neutral',
             smile: 'dio_smile',
@@ -559,9 +568,14 @@ class BeachScene extends Phaser.Scene {
 
     createOptions(options) {
         const optionHeight = 35;
-        this.currentOptions = options; // Guardar referencia
-        this.selectedOptionIndex = 0; // Índice seleccionado
-        
+        this.currentOptions = options;
+        this.selectedOptionIndex = 0;
+        this.lastKeyPressTime = 0; // Resetear temporizador
+
+        // Eliminar listeners antiguos
+        this.input.keyboard.off('keydown-UP');
+        this.input.keyboard.off('keydown-DOWN');
+
         // Crear botones
         this.optionButtons = options.map((option, index) => {
             const btn = this.add.text(270, this.optionStartY + (index * optionHeight), `➤ ${option.text}`, {
@@ -582,17 +596,26 @@ class BeachScene extends Phaser.Scene {
             return btn;
         });
 
-        // Resaltar opción inicial
         this.hoverOption(0);
         
-        // Habilitar navegación por teclado
-        this.input.keyboard.on('keydown-UP', this.handleKeyUp, this);
-        this.input.keyboard.on('keydown-DOWN', this.handleKeyDown, this);
-        this.input.keyboard.on('keydown-ENTER', this.handleKeyEnter, this);
+        // Nuevo sistema de navegación con throttling
+        this.input.keyboard.on('keydown-UP', () => {
+            if (Date.now() - this.lastKeyPressTime < 150) return;
+            this.handleKeyUp();
+            this.lastKeyPressTime = Date.now();
+        });
+
+        this.input.keyboard.on('keydown-DOWN', () => {
+            if (Date.now() - this.lastKeyPressTime < 150) return;
+            this.handleKeyDown();
+            this.lastKeyPressTime = Date.now();
+        });
+
+        this.input.keyboard.on('keydown-ENTER', () => this.handleKeyEnter());
+        this.input.keyboard.on('keydown-SPACE', () => this.handleKeyEnter());
     }
 
     hoverOption(index) {
-        // Resetear todos los estilos
         this.optionButtons.forEach((btn, i) => {
             btn.setBackgroundColor(i === index ? '#3d3d3d' : '#2d2d2d');
             btn.setStyle({ fill: i === index ? '#FFA500' : '#FFD700' });
@@ -607,21 +630,29 @@ class BeachScene extends Phaser.Scene {
     }
 
     handleKeyUp() {
-        this.selectedOptionIndex = Phaser.Math.Clamp(
+        const newIndex = Phaser.Math.Clamp(
             this.selectedOptionIndex - 1, 
             0, 
             this.currentOptions.length - 1
         );
-        this.hoverOption(this.selectedOptionIndex);
+        
+        if (newIndex !== this.selectedOptionIndex) {
+            this.selectedOptionIndex = newIndex;
+            this.hoverOption(this.selectedOptionIndex);
+        }
     }
 
     handleKeyDown() {
-        this.selectedOptionIndex = Phaser.Math.Clamp(
+        const newIndex = Phaser.Math.Clamp(
             this.selectedOptionIndex + 1, 
             0, 
             this.currentOptions.length - 1
         );
-        this.hoverOption(this.selectedOptionIndex);
+        
+        if (newIndex !== this.selectedOptionIndex) {
+            this.selectedOptionIndex = newIndex;
+            this.hoverOption(this.selectedOptionIndex);
+        }
     }
 
     handleKeyEnter() {
@@ -629,10 +660,10 @@ class BeachScene extends Phaser.Scene {
     }
 
     handleOptionSelection(option) {
-        // Limpiar eventos de teclado
         this.input.keyboard.off('keydown-UP', this.handleKeyUp, this);
         this.input.keyboard.off('keydown-DOWN', this.handleKeyDown, this);
         this.input.keyboard.off('keydown-ENTER', this.handleKeyEnter, this);
+        this.input.keyboard.off('keydown-SPACE', this.handleKeyEnter, this);
         
         this.affinity += option.affinity;
         this.showDioResponse(option);
@@ -641,7 +672,7 @@ class BeachScene extends Phaser.Scene {
     showDioResponse(option) {
         this.clearDialogueElements();
         this.createDialogueOverlay();
-        this.createPortrait(option.expression); // Actualizar expresión
+        this.createPortrait(option.expression);
 
         const tempText = this.add.text(270, 200, option.response, {
             fontSize: '20px',
@@ -705,12 +736,11 @@ class BeachScene extends Phaser.Scene {
     }
 
     clearDialogueElements() {
-        // Limpiar eventos de teclado
         this.input.keyboard.off('keydown-UP', this.handleKeyUp, this);
         this.input.keyboard.off('keydown-DOWN', this.handleKeyDown, this);
         this.input.keyboard.off('keydown-ENTER', this.handleKeyEnter, this);
+        this.input.keyboard.off('keydown-SPACE', this.handleKeyEnter, this);
         
-        // Resto del código de limpieza
         this.dialogueElements.forEach(element => element.destroy());
         this.dialogueElements = [];
         this.optionButtons = [];
@@ -723,6 +753,19 @@ class BeachScene extends Phaser.Scene {
             .fillRect(0, 0, 800, 600)
             .setDepth(10);
         this.dialogueElements.push(overlay);
+    }
+
+    clearDialogueElements() {
+        // Limpiar todos los listeners de teclado
+        this.input.keyboard.off('keydown-UP');
+        this.input.keyboard.off('keydown-DOWN');
+        this.input.keyboard.off('keydown-ENTER');
+        this.input.keyboard.off('keydown-SPACE');
+        
+        this.dialogueElements.forEach(element => element.destroy());
+        this.dialogueElements = [];
+        this.optionButtons = [];
+        this.currentOptions = null;
     }
 
     shutdown() {
